@@ -1,0 +1,146 @@
+loginForm에서 시작
+hong 1234 로그인
+
+수업시간에 해본 내용도 혼자 해보려니 상당히 어려웠고
+공부가 제대로 안됐는지, 배운 내용정도만 해보는데도 시간이 너무 오래 걸렸습니다.
+중간에 몸이 좋지 않아 제대로 못하고 제출한점이 굉장이 아쉽습니다.
+시간이 되면 혼자서 다시 완성해보겠습니다. 
+
+---------------------
+
+-- 회원 테이블
+create sequence mb_seq
+increment by 1
+start with 1
+minvalue 0
+maxvalue 10000
+nocache;
+
+drop table member purge ;
+create table member(
+	no number primary key,
+	id varchar2(30) not null,
+	pw varchar2(10) not null,
+	name varchar2(30) not null,
+	b_date varchar2(10) default sysdate,
+	gender varchar2(10),
+	email varchar2(30),
+	phone varchar2(30)
+
+);
+
+insert into member values(
+	mb_seq.nextval,'hong','1234','홍길동','2020-01-01','남자','abc@naver.co','01012345678'
+);
+
+
+
+-- 카테고리 테이블
+drop sequence cate_seq ;
+drop table pro_cate purge ;
+
+create sequence cate_seq
+increment by 1
+start with 1
+minvalue 1
+maxvalue 10000
+nocache;
+
+
+create table category(
+	cnum 	number primary key,
+	code 	varchar2(20) not null,
+	cname 	varchar2(50) not null
+);
+
+insert into category values(cate_seq.nextval,'PC','컴퓨터');
+insert into category values(cate_seq.nextval,'LAPTOP','노트북');
+insert into category values(cate_seq.nextval,'PHONE','핸드폰');
+
+
+-- 상품 테이블
+drop sequence prod_seq ;
+
+create sequence prod_seq 
+increment by 1
+start with 1
+minvalue 0
+maxvalue 10000
+nocache;
+
+drop table product purge ;
+create table product(
+	pnum 		int not null primary key,
+	pname 		varchar2(50) not null,
+	pcategory_fk  	varchar2(20) not null, -- 선택한 카테고리
+	pcompany 	varchar2(50),
+	pimage   		varchar2(30),
+	pqty   int default 0,
+	price   		int default 0,
+	pspec   		varchar2(12),
+	pcontents 	varchar2(300),
+	point   		int default 0,
+	pinputdate 	varchar2(10)
+);
+
+insert into product values(prod_seq.nextval,'맥북','LAPTOP	','애플','맥북.jfif',3,1000000,'EVENT','애플 맥북 에어',1111,'2021-07-30');
+insert into product values(prod_seq.nextval,'그램','LAPTOP	','LG','그램.jfif',4,800000,'BEST','LG 그램 신학기 베스트 상품',1111,'2021-07-30');
+insert into product values(prod_seq.nextval,'갤럭시','PHONE','삼성','갤럭시.jfif',22,500000,'NEW','삼성 갤럭시 신상품',1111,'2021-07-30');
+insert into product values(prod_seq.nextval,'아이폰','PHONE','애플','아이폰.jfif',33,900000,'SALE','애플 맥북 에어',1111,'2021-07-30');
+insert into product values(prod_seq.nextval,'사무용PC','PC','HP','사무.jfif',11,300000,'SALE','애플 맥북 에어',1111,'2021-07-30');
+insert into product values(prod_seq.nextval,'게이밍PC','PC','ASUS','게이밍.jfif',7,900000,'BEST','애플 맥북 에어',1111,'2021-07-30');
+
+맥북	LAPTOP	애플	맥북.jfif	3	1000000	EVENT	설명	1111	2021-07-30
+그램	LAPTOP	LG	그램.jfif	4	800000	BEST	설명	10	2021-07-30
+갤럭시	PHONE	삼성	갤럭시.jfif	3	500000	NEW	설명	10	2021-07-29
+아이폰	PHONE	애플	아이폰.jfif	4	700000	SALE	설명	11	2021-07-29
+사무용PC	PC	HP	사무.jfif	1	300000	SALE	사무용	132	2020-01-02
+게이밍PC	PC	ASUS	게이밍.jfif	2	900000	BEST	게이밍 PC	2222	2020-08-11
+
+
+-- 주문 테이블
+drop sequence orderseq ;
+--create sequence orderseq nocache;  
+
+create sequence orderseq 
+increment by 1
+start with 1
+minvalue 0
+maxvalue 10000
+nocache;
+ 
+ 
+drop table orders purge ;
+create table orders(
+	orderId number, -- 주문번호(orderseq)
+	memno number, -- 회원번호
+	pnum number, -- 상품번호
+	qty number, -- 주문수량
+	amount number -- 전체가격
+);
+
+-- 공지사항 테이블 
+drop table board cascade constraints purge ;
+
+create table board( 
+	num number not null primary key,
+	writer varchar2(10) not null,
+	email varchar2(10),
+	subject varchar2(20) not null,
+	passwd varchar2(12) not null,
+	reg_date date not null,
+	readcount int default 0,
+	ref number not null,
+	re_step number not null,
+	re_level number not null,
+	content varchar2(20) not null,
+	ip varchar2(15) not null
+);
+
+drop sequence board_seq;
+create sequence board_seq
+  increment by 1
+  start with 1
+  minvalue 1
+  maxvalue 10000
+  nocache;
